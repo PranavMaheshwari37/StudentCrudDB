@@ -13,20 +13,16 @@ import java.util.Map;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(StudentNotFoundException.class)
-    public ResponseEntity<String> handleStudentNotFound(StudentNotFoundException ex) {
+    public ResponseEntity<String> handleStudentNotFound(StudentNotFoundException ex)
+    {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
+      @ExceptionHandler(MethodArgumentNotValidException.class)
+      public ResponseEntity<String> handleValidationErrors(MethodArgumentNotValidException ex)
+      {
+          return ResponseEntity
+                  .badRequest()
+                  .body("Validation failed. Please check input fields.");
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, String>> handleValidationErrors(
-            MethodArgumentNotValidException ex) {
-
-        Map<String, String> errors = new HashMap<>();
-
-        ex.getBindingResult().getFieldErrors().forEach(error ->
-                errors.put(error.getField(), error.getDefaultMessage())
-        );
-
-        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
-    }
+      }
 }

@@ -1,9 +1,9 @@
 package StudentCrudDB.example.StudentCrudDB.controller;
 
-import StudentCrudDB.example.StudentCrudDB.exception.StudentNotFoundException;
 import StudentCrudDB.example.StudentCrudDB.model.Student;
-import StudentCrudDB.example.StudentCrudDB.repository.StudentRepository;
+import StudentCrudDB.example.StudentCrudDB.service.StudentService;
 import jakarta.validation.Valid;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,29 +12,28 @@ import java.util.List;
 @RequestMapping("/students")
 public class StudentController {
 
-    private final StudentRepository studentRepository;
+    private final StudentService studentService;
 
-    public StudentController(StudentRepository studentRepository) {
-        this.studentRepository = studentRepository;
+    public StudentController(StudentService studentService) {
+        this.studentService = studentService;
     }
 
     // CREATE
     @PostMapping
     public Student addStudent(@Valid @RequestBody Student student) {
-        return studentRepository.save(student);
+        return studentService.addStudent(student);
     }
 
     // READ ALL
     @GetMapping
     public List<Student> getAllStudents() {
-        return studentRepository.findAll();
+        return studentService.getAllStudents();
     }
 
     // READ BY ID
     @GetMapping("/{id}")
     public Student getStudentById(@PathVariable Integer id) {
-        return studentRepository.findById(id)
-                .orElseThrow(() -> new StudentNotFoundException(id));
+        return studentService.getStudentById(id);
     }
 
     // UPDATE
@@ -42,21 +41,13 @@ public class StudentController {
     public Student updateStudent(
             @PathVariable Integer id,
             @Valid @RequestBody Student updatedStudent) {
-
-        Student student = studentRepository.findById(id)
-                .orElseThrow(() -> new StudentNotFoundException(id));
-
-        student.setName(updatedStudent.getName());
-        return studentRepository.save(student);
+        return studentService.updateStudent(id, updatedStudent);
     }
 
     // DELETE
     @DeleteMapping("/{id}")
-    public String deleteStudent(@PathVariable Integer id) {
-        Student student = studentRepository.findById(id)
-                .orElseThrow(() -> new StudentNotFoundException(id));
-
-        studentRepository.delete(student);
-        return "Student deleted with id: " + id;
+    public ResponseEntity<Void> deleteStudent(@PathVariable Integer id) {
+        studentService.deleteStudent(id);
+        return ResponseEntity.noContent().build();
     }
 }
