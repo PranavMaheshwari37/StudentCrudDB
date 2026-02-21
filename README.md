@@ -51,6 +51,24 @@ exception → custom & global exception handling
 | PUT  | /students/{id}     | Update student      |
 | DELETE | /students/{id}   | Delete student      |
 
+## 🗄️ Database Configuration
+
+Create a MySQL database:
+
+```sql
+CREATE DATABASE studentdb;
+
+---
+
+Update application.properties:
+
+spring.datasource.url=jdbc:mysql://localhost:3306/studentdb
+spring.datasource.username=root
+spring.datasource.password=your_password
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+spring.jpa.database-platform=org.hibernate.dialect.MySQLDialect
+
 ---
 
 ## ▶️ How to Run
@@ -59,16 +77,15 @@ exception → custom & global exception handling
    ```bash
    git clone https://github.com/PranavMaheshwari37/StudentCrudDB.git
 
-2. Configure MySQL in application.properties
-   
-spring.datasource.url=jdbc:mysql://localhost:3306/studentdb
-spring.datasource.username=root
-spring.datasource.password=your_password
-spring.jpa.hibernate.ddl-auto=update
+2. Navigate to the project directory
+   cd StudentCrudDB
 
-3. Run the application  mvn spring-boot: run
+3. Run the application
+   mvn spring-boot:run
+
 4. Test APIs using Postman or browser
-
+   
+---
 
 📈 **Future Improvements**
 
@@ -77,6 +94,11 @@ spring.jpa.hibernate.ddl-auto=update
 3. Authentication using Spring Security
 4. Unit and integration testing
 
+---
+
 👤 **Author**
 Pranav Maheshwari
 Java | Spring Boot | Backend Development
+GitHub: https://github.com/PranavMaheshwari37
+
+---
